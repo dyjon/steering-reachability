@@ -65,12 +65,22 @@ NEGATIVE = [
 ]
 
 
+def unpack(output):
+    """Decoder layers return either a bare hidden-states tensor or a tuple starting with
+    one, depending on the transformers version. Qwen2 returns a bare tensor as of 4.5x."""
+    return output[0] if isinstance(output, tuple) else output
+
+
+def repack(output, h):
+    return (h,) + output[1:] if isinstance(output, tuple) else h
+
+
 def add_at_last_position(vec):
     """Forward hook adding `vec` to the residual stream at the final token position."""
     def hook(module, args, output):
-        h = output[0].clone()
+        h = unpack(output).clone()
         h[:, -1, :] += vec
-        return (h,) + output[1:]
+        return repack(output, h)
     return hook
 
 
@@ -93,7 +103,8 @@ def logprobs(model, layer, tok, texts, vec=None):
 def hidden_at_last(model, layer, tok, texts):
     """Residual stream at `layer`, final token position."""
     grabbed = []
-    handle = layer.register_forward_hook(lambda m, a, o: grabbed.append(o[0][:, -1, :]))
+    handle = layer.register_forward_hook(
+        lambda m, a, o: grabbed.append(unpack(o)[:, -1, :]))
     try:
         for i in range(0, len(texts), BATCH):
             enc = tok(texts[i:i + BATCH], return_tensors="pt", padding=True,
@@ -114,7 +125,7 @@ def main():
     tok = AutoTokenizer.from_pretrained(MODEL, padding_side="left")
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
-    model = AutoModelForCausalLM.from_pretrained(MODEL, torch_dtype=torch.float32).to(DEVICE)
+    model = AutoModelForCausalLM.from_pretrained(MODEL, dtype=torch.float32).to(DEVICE)
     model.eval()
 
     layers = model.model.layers
