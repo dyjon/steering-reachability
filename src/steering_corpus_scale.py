@@ -1,4 +1,4 @@
-"""Does the steering reachability gap survive corpus scaling, and what is it made of?
+r"""Does the steering reachability gap survive corpus scaling, and what is it made of?
 
 Follow-up to steering_reachability.py, rebuilt after feedback from Aayush Mishra, first
 author of "Steered LLM Activations are Non-Surjective".
