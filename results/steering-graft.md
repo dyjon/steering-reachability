@@ -1,8 +1,8 @@
 # Steering against a reachable displacement, at matched norm
 
-Run of `src/steering_graft.py` at commit `b8d3c9f`, 2 September 2026. Qwen2.5-0.5B-Instruct,
-layer 12 of 24, last token position, 128 wikitext passages of exactly 96 tokens. 3m 20s on a
-Kaggle T4.
+Run of `src/steering_graft.py` at commit `b8d3c9f`, 6 September 2026. Qwen2.5-0.5B-Instruct,
+layer 12 of 24, last token position, 128 wikitext passages of exactly 96 tokens. The sweep
+finished 188.6 s into the notebook, on a Kaggle T4 x2.
 
 Follows [`steering-sensitivity.md`](steering-sensitivity.md), which established that steering
 is quieter than a random on-manifold direction at matched magnitude but left the KL axis
@@ -62,7 +62,7 @@ The consequence is that graft/steering grows with distance: 1.21, 1.23, 2.38, **
 ### The geometry does not explain it
 
 `steering-sensitivity.md` closed with an additive energy-split model predicting steering's KL
-from the fraction of its energy inside the principal subspace, to within 6% and 13% and with
+from the fraction of its energy inside the principal subspace, to within 6% and 15% and with
 no free parameters. **That model is dead here.**
 
 Steering sits at 12.7% subspace energy; the k = 48 graft sits at 10.8%. Nearly identical
@@ -73,6 +73,28 @@ directions matched on the only geometric quantity we measured behave completely 
 One thing did replicate. At the largest displacement subspace/steering = 1.69, against 1.68
 from the previous run's independent prompt set. At smaller displacements the ratio is
 noise-dominated (0.90, 1.16, 0.83) and should not be read.
+
+### Why `d in sub` is 10%, and a conceptual error it exposes
+
+I expected reachable displacements to sit at 70–90% inside the top-32 subspace. They are at
+9.5–12.4%. The expectation was wrong for a reason worth writing down.
+
+The top-32 captures 61.7% of variance *across* prompts, so the difference between two
+**random** prompts would indeed be about 61.7% in that subspace. But `d` is not that. It is the
+difference between a prompt and a variant sharing its last 96 − k tokens, so the shared
+structure cancels and what survives is the residual. The dominant principal directions describe
+where prompts *sit*; they do not describe how *nearby* prompts differ.
+
+So "on the manifold" and "in the global principal subspace" are not the same property, and the
+previous run's writeup conflated them. Local tangent directions to the reachable set are nearly
+orthogonal to the global principal subspace. That is a real finding rather than a nuisance, and
+it is most of why the energy-split model fails here.
+
+It also means **"steering energy in the subspace" is not a property of steering.** The same
+fixed steering vector measured 19.4% against the previous run's basis and 12.7% against this
+one, because the two prompt sets induce different subspaces (256 passages filtered at >200
+chars, versus 128 truncated to exactly 96 tokens). Neither number characterises the vector on
+its own.
 
 ### Reachable displacements are small
 
@@ -123,6 +145,13 @@ sub-quadratic, consistent with saturation, and close enough to trust both runs.
 
 - Sentiment steering has no vulnerability semantics. The paper uses refusal and persona
   vectors.
+- **Position confound in the steering vector, present in both runs.** It is a difference of
+  means over the 8 positive and 8 negative sentences, which are 3 to 5 tokens long, so it is
+  read at sequence positions 2–4. It is then added at position 95 of a 96-token passage. With
+  RoPE the activation statistics at those positions differ, so some of this vector is a
+  short-sequence direction rather than a sentiment direction. It does not break the
+  matched-norm comparison, but it does mean this is not the persona-vector construction the
+  paper uses.
 - One layer, one model, one steering vector, no error bar on steering's *direction* (only on
   its per-prompt KL).
 - The variant family is narrow by construction, which caps ‖d‖ at 0.4 activation norms.

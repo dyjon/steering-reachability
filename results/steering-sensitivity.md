@@ -95,10 +95,19 @@ steering's energy split (19.4% subspace / 80.6% complement), no free parameters:
 | δ | predicted | observed | error |
 |---|---|---|---|
 | 0.25 | 0.0220 | 0.0234 | 6% |
-| 1.00 | 0.499 | 0.434 | 13% |
+| 1.00 | 0.499 | 0.434 | 15% |
+
+Error is relative to the observed value in both rows. An earlier version quoted 13% for the
+second, which used the predicted value as the denominator and was inconsistent with the first.
 
 Steering has no behavioural signature beyond where its energy sits. Any direction with 19% of
 its mass in the principal subspace does roughly what it does.
+
+> **SUPERSEDED 6 Sept by [`steering-graft.md`](steering-graft.md).** The graft run matches
+> steering (12.7% subspace energy) against a reachable displacement (10.8%) and gets KLs
+> differing by 2.4x, with the sign opposite to what this model predicts. Two directions
+> matched on subspace energy do not behave alike. The model held on the baselines it was
+> fitted to and does not generalise.
 
 **Steering is the least curved direction available.** δ=0.25 → δ=1 is 4×, so pure quadratic
 KL would give 16×. Observed: steering 18.5×, subspace 23.7×, complement 22.3×, natdiff 60.7×.
@@ -135,6 +144,13 @@ reachable activation?**
 | | |
 |---|---|
 | steering < reachable step | a near-miss costs less than its L2 implies; formal non-surjectivity has little behavioural bite |
+
+> **This reading rule was wrong**, and the run came back on this branch. The direction that
+> matters is the one separating a steered point from its nearest reachable neighbour, and
+> reachable-type directions turn out to be the loudest per unit norm, accelerating at
+> `|d|^2.65` against steering's `|d|^1.98`. An L2 miss along one costs more than a generic
+> displacement of that size, so the result supports the paper's caution. See
+> [`steering-graft.md`](steering-graft.md).
 | steering > reachable step | steering reaches a sensitive direction prompting does not; the paper's caution carries through to behaviour |
 
 Also fix two things Run 2 got wrong: report SE **over prompts** (per-row KL is already
