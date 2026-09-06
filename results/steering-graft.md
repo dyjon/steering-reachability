@@ -59,6 +59,11 @@ leave that regime.
 
 The consequence is that graft/steering grows with distance: 1.21, 1.23, 2.38, **2.85**.
 
+These are two-point fits, first row to last. Least squares over all four points gives graft
+2.71, steering 1.97, subspace 2.31, full 1.96. Steering and graft are stable under the change
+of method; subspace moves by 0.17 and is the column to trust least, which matches its being the
+noisiest.
+
 ### The geometry does not explain it
 
 `steering-sensitivity.md` closed with an additive energy-split model predicting steering's KL
