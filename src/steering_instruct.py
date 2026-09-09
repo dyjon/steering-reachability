@@ -32,8 +32,11 @@ Everything is normalised to **its own domain's** median activation norm, which i
 most needed fixing.
 
 Instructions come from AdvBench (harmful) and Alpaca (harmless), the standard pairing in
-refusal work, with an inline fallback if either fails to download. The vector set and the
-ladder set are disjoint.
+refusal work. AdvBench is tried on the Hub first and then at its canonical CSV, since the Hub
+copy 404s from Kaggle; only the `goal` column is read, never the `target` column of
+affirmative-response prefixes. There is an inline fallback below both, but the run guards on
+set size and stops rather than proceeding with it. The vector set and the ladder set are
+disjoint.
 
 **No ablation, no jailbreak.** Directions are added at matched magnitude and the next-token
 distribution measured. Nothing here suppresses refusal or generates harmful content.
@@ -168,15 +171,39 @@ def chat(tok, prompts):
     return e["input_ids"], e["attention_mask"]
 
 
-def load_instructions():
-    harmful, harmless = [], []
+ADVBENCH_CSV = ("https://raw.githubusercontent.com/llm-attacks/llm-attacks/"
+                "main/data/advbench/harmful_behaviors.csv")
+
+
+def load_harmful():
+    """AdvBench goals, the standard harmful-instruction set in refusal work.
+
+    Only the `goal` column is read. The companion `target` column holds affirmative-response
+    prefixes used to optimise jailbreaks, which this experiment has no use for, so it is
+    deliberately never loaded.
+    """
     try:
         d = load_dataset("walledai/AdvBench", split="train")
-        harmful = [r.strip() for r in d["prompt"]]
-        print(f"AdvBench: {len(harmful)} harmful instructions")
+        rows = [r.strip() for r in d["prompt"]]
+        print(f"AdvBench via HF: {len(rows)} harmful instructions")
+        return rows
     except Exception as e:
-        print(f"AdvBench unavailable ({type(e).__name__}), using inline fallback")
-        harmful = FALLBACK_HARMFUL
+        print(f"HF AdvBench unavailable ({type(e).__name__}), trying the canonical CSV")
+    try:
+        import csv
+        import io
+        import urllib.request
+        raw = urllib.request.urlopen(ADVBENCH_CSV, timeout=60).read().decode("utf-8")
+        rows = [r["goal"].strip() for r in csv.DictReader(io.StringIO(raw)) if r.get("goal")]
+        print(f"AdvBench via CSV: {len(rows)} harmful instructions")
+        return rows
+    except Exception as e:
+        print(f"CSV unavailable ({type(e).__name__}), falling back inline")
+        return FALLBACK_HARMFUL
+
+
+def load_instructions():
+    harmful, harmless = load_harmful(), []
     try:
         d = load_dataset("tatsu-lab/alpaca", split="train")
         harmless = [r["instruction"].strip() for r in d
