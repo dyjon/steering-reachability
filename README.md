@@ -44,10 +44,11 @@ with distance rising and the effect falling. Two donors at ‖d‖ 5.39 and 5.38
 1.4502 and 1.0160. Any ladder fitted against distance alone mixes conditions differing by 1.4×
 to 2.3× at identical distance. This is the one I would most want checked by someone else.
 
-**Chat templating flips the ordering at layer 12.** Raw text: a reachable step moves behaviour
-more than refusal, all five conditions, 2.26 to 3.97. Templated: the other way, all six
-conditions, 0.11 to 0.91. Both content types, all three donor kinds, no exceptions. No account
-of why.
+**Chat templating flips the ordering at layer 12.** Templated, a reachable step moves behaviour
+*less* than refusal in all six cells — two content types by three donor kinds — at 0.11 to 0.91.
+Raw text goes the other way, 2.26 to 3.97. Note the asymmetry in support: the six templated
+figures are independent cells, the five raw ones are a single arm read at five displacements. No
+account of why the template does this.
 
 **The graft's growth exponent exceeds refusal's in 11 of 12 conditions**, mean 2.35 against 1.71
 at layer 12. So the gap between them narrows as displacement grows.
