@@ -36,13 +36,21 @@ API with the executed file verified by hash against the commit it claims to be.
 | 10 | [format](results/steering-format.md) | Content, or chat template? | Format 2.78×, content 1.58×. Templating identical text lifts refusal's subspace alignment 8.8%→49.9% |
 | 11 | [kind](results/steering-kind.md) | Does donor kind change the answer? | **0.73× to 4.87×** on the same prompts at the same displacement. Retracts 9 and 10 |
 | 12 | [graded](results/steering-graded.md) | Was run 11 fitting noise? | No. And the graft **falls** as displacement rises: +16% distance, −38% KL, monotone |
+| 13 | [matched](results/steering-matched.md) | Select donors by target distance instead of building them | Kind changes the graft **0.51× to 1.27×** at exactly matched distance. And **cross-kind donors do not exist below 0.4 norms** |
 
 ## What stands
 
 **Graft KL is not a function of displacement.** Run 12 shows it directly: five ordered points
-with distance rising and the effect falling. Two donors at ‖d‖ 5.39 and 5.38 give graft KL
-1.4502 and 1.0160. Any ladder fitted against distance alone mixes conditions differing by 1.4×
-to 2.3× at identical distance. This is the one I would most want checked by someone else.
+with distance rising and the effect falling. Run 13 measures the size of the second variable by
+selecting donors at target distances rather than constructing them, giving cross/own of 0.51,
+1.27 and 0.58 in the three cells where achieved distances agree to two decimals. Any ladder
+fitted against distance alone mixes conditions differing by up to 2× at identical distance. This
+is the one I would most want checked by someone else.
+
+**Cross-kind donors do not exist below about 0.4 activation norms.** Out of 512 candidates, in
+either direction, at either depth, nothing of the other kind sits within 15% of 0.2 or 0.3 norms
+of a base prompt. That is why runs 11 and 12 could not get range: they were fitting curves over
+a region where the curve does not exist.
 
 **Chat templating flips the ordering at layer 12.** Templated, a reachable step moves behaviour
 *less* than refusal in all six cells — two content types by three donor kinds — at 0.11 to 0.91.
