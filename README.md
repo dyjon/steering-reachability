@@ -1,4 +1,4 @@
-# Steering reachability — fourteen runs
+# Steering reachability — fifteen runs
 
 A follow-up to *Steered LLM Activations are Non-Surjective* (Mishra et al., 2026).
 Qwen2.5-0.5B-Instruct, fp32. Everything is measured on the residual stream at one layer, at the
@@ -82,6 +82,7 @@ API with the executed file verified by hash against the commit it claims to be.
 | 12 | [graded](results/steering-graded.md) | Was run 11 just fitting noise on too little range? | No. And the disturbance **falls as the distance rises**: +16% distance, −38% KL, monotone. Distance is not the variable |
 | 13 | [matched](results/steering-matched.md) | Select donors already sitting at a target distance, rather than building them and hoping | Kind changes the graft by about 2× at exactly matched distance. No *pure* cross-kind donor in a 512 pool sits below 0.4 norms |
 | 14 | [controls](results/steering-controls.md) | The three controls the audit asked for | Kind effect holds with intervals, 8 of 9 exclude 1. The templating flip was the refusal vector's origin. Along a single ray, grafts are as quadratic as steering |
+| 15 | [fisher](results/steering-fisher.md) | Does the Fisher quadratic form ½dᵀFd explain the direction effects? | Within 0.4 norms, yes: every vector-provenance and graft/refusal ratio on the right side of 1, provenance to within 1%. Beyond 0.4 norms it underpredicts up to 3×, and kind effects are only partly explained |
 
 ---
 
@@ -110,16 +111,27 @@ difference-of-means directions that are nearly orthogonal (cos 0.125 at layer 12
 18), and each moves behaviour 1.3× to 3.9× more in its own format than in the other. Neither is
 ablated here, so whether the untemplated one encodes *refusal* or *harmful content* is open.
 
-### The common cause
+### The common cause, tested
 
 Every effect in this line that looked like an effect of **distance** turned out to be an effect
 of **direction** — donor kind, the change of donor between ladder rungs, or the refusal vector's
-origin. Along one direction, distance enters only as distance². That is what a local quadratic
-form predicts, KL ≈ ½ dᵀFd with the Fisher matrix *F* strongly anisotropic. The data are
-consistent with it; *F* has not been measured. Doing so is the obvious next run.
+origin. Run 15 tests the explanation that would account for all of it: a local quadratic form,
+KL ≈ ½ dᵀFd, with F the Fisher information of the next-token distribution.
 
-**For the paper:** L2 distance to the reachable set is the wrong yardstick for whether prompting
-can reproduce steered behaviour. The relevant quantity is the Fisher-weighted residual.
+**Within about 0.4 activation norms it holds.** It predicts magnitudes to within roughly 20–30%,
+and it puts every one of 32 vector-provenance and graft/refusal ratios on the right side of 1. The
+largest effect in run 14 — a templated-built refusal vector moving templated prompts 3.88× more
+than a raw-built one — is predicted at 3.85×.
+
+**Beyond 0.4 norms it underpredicts**, by a median 1.5× at 0.4–0.5 norms and 3.3× at 0.7, and it
+gets one destination-kind comparison on the wrong side of 1. Kind effects, which were only ever
+measured at those distances, are partly but not fully explained.
+
+**For the paper:** a near-miss is a small residual, and small residuals are where the Fisher form
+is accurate. So whether a prompt that nearly reaches a steered state reproduces its behaviour is
+governed by the Fisher length of the residual, not its Euclidean length — and that length costs
+two forward passes to compute. How small a residual realistic prompt search achieves is SipIt's
+question, and decides whether near-misses fall inside this regime.
 
 ## What was retracted
 
