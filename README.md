@@ -1,4 +1,4 @@
-# Steering reachability — thirteen runs
+# Steering reachability — fourteen runs
 
 A follow-up to *Steered LLM Activations are Non-Surjective* (Mishra et al., 2026).
 Qwen2.5-0.5B-Instruct, fp32. Everything is measured on the residual stream at one layer, at the
@@ -81,48 +81,45 @@ API with the executed file verified by hash against the commit it claims to be.
 | 11 | [kind](results/steering-kind.md) | Does it matter what sort of prompt the graft steps toward? | Enormously. The same "domain effect" reads anywhere from **0.73× to 4.87×** depending only on donor kind. **Retracts runs 9 and 10** |
 | 12 | [graded](results/steering-graded.md) | Was run 11 just fitting noise on too little range? | No. And the disturbance **falls as the distance rises**: +16% distance, −38% KL, monotone. Distance is not the variable |
 | 13 | [matched](results/steering-matched.md) | Select donors already sitting at a target distance, rather than building them and hoping | Kind changes the graft by about 2× at exactly matched distance. No *pure* cross-kind donor in a 512 pool sits below 0.4 norms |
+| 14 | [controls](results/steering-controls.md) | The three controls the audit asked for | Kind effect holds with intervals, 8 of 9 exclude 1. The templating flip was the refusal vector's origin. Along a single ray, grafts are as quadratic as steering |
 
 ---
 
 ## What stands
 
-**Steering stays quadratic out to operating strength.**
-Scaled along its own direction, a steering vector's effect on the next-token distribution grows
-as distance², exponent 1.92 to 2.07, across a sentiment and a refusal vector at layers 6, 12 and
-18, replicated bit-identically. Quadratic behaviour at *small* distance is guaranteed by Taylor
-expansion; the content here is that it holds out to about one activation norm, which is what any
-local, Fisher-metric argument about steering needs.
+Three statements, each checked against the code and carrying 95% intervals.
 
-**Provisional — distance to the reachable set is not enough.**
-Two reachable displacements of the same size can differ by about 2× in behavioural effect,
-depending on which prompt they reach. Run 13 selects donors already sitting at a target distance
-and finds cross/own ratios of 0.51, 1.27 and 0.58 in the three cells where achieved distances
-agree to two decimals.
+**1. Along any single direction, behavioural change grows as distance squared.**
+A steering vector scaled along its own ray stays quadratic out to about one activation norm
+(exponent 1.92 to 2.07, two vectors, three layers). Run 14 measures reachable displacements the
+same way, one ray at a time, and finds the same: 2.04 to 2.21, with refusal vectors at 1.93 to
+2.26.
 
-*Why it matters:* even a complete answer to "how close can a prompt get?" would not settle
-whether prompting reproduces steered behaviour, because direction matters as well as distance.
-*Why it is provisional:* runs 12 and 13 report no error bars. The two ~2× effects are very likely
-real; the 1.27 should not be quoted without an interval.
+**2. At matched distance, the kind of destination changes the effect.**
+Two reachable displacements of the same size differ in behavioural effect by a factor of 0.51
+to 1.77 depending on which sort of prompt they land on. Eight of nine cells have intervals that
+exclude 1 — for instance 0.51 [0.42, 0.62] and 1.28 [1.19, 1.39].
 
-## Reopened by audit, 1 October
+*Why it matters:* a complete answer to "how close can a prompt get to a steered state?" would
+not settle whether prompting reproduces the steered behaviour. Direction matters as well as
+distance.
 
-Checked against the code rather than the writeups. Each was listed as standing until today.
+**3. A refusal direction depends heavily on the prompt format it is built from.**
+The same 96 harmful/harmless pairs, read with and without a chat template, give two
+difference-of-means directions that are nearly orthogonal (cos 0.125 at layer 12, 0.088 at layer
+18), and each moves behaviour 1.3× to 3.9× more in its own format than in the other. Neither is
+ablated here, so whether the untemplated one encodes *refusal* or *harmful content* is open.
 
-**The templating flip has a provenance confound.** At layer 12, refusal outweighs a reachable
-step in chat-templated prompts and the reverse holds in raw text. But the refusal vector is
-built from chat-templated prompts in every run that uses it, so on raw text it is a direction
-from one distribution applied to another. A templated-built vector moving templated activations
-more is the expected result, and run 10's rise in alignment from 8.8% to 49.9% is what
-provenance alone would predict. *Control needed:* a refusal vector built from untemplated text.
+### The common cause
 
-**Graft-versus-steering exponents are not like-for-like.** Steering is one direction scaled. The
-graft ladder takes a different donor at every rung, so its exponent mixes magnitude with change
-of direction — and run 13 shows direction alone moves the graft by up to 2×. *Control needed:*
-scale each graft difference along its own ray.
+Every effect in this line that looked like an effect of **distance** turned out to be an effect
+of **direction** — donor kind, the change of donor between ladder rungs, or the refusal vector's
+origin. Along one direction, distance enters only as distance². That is what a local quadratic
+form predicts, KL ≈ ½ dᵀFd with the Fisher matrix *F* strongly anisotropic. The data are
+consistent with it; *F* has not been measured. Doing so is the obvious next run.
 
-**"No cross-kind destination below 0.4 norms" is narrower than it reads.** It holds for *pure*
-other-domain prompts in a 512-prompt pool at 15% tolerance. Graded blends of the two do reach
-0.2 norms, so the region is measurable, just not with pure donors.
+**For the paper:** L2 distance to the reachable set is the wrong yardstick for whether prompting
+can reproduce steered behaviour. The relevant quantity is the Fisher-weighted residual.
 
 ## What was retracted
 
@@ -137,10 +134,13 @@ other-domain prompts in a 512-prompt pool at 15% tolerance. Graded blends of the
 | "The effect is not refusal-specific" | run 9 — it rested on a single unreliable point |
 | Treating disturbance as one-dimensional in distance | run 12 |
 | Two cells whose fitted exponents came out negative | run 12, self-caught |
+| Chat templating flips which is louder, at layer 12 | run 14 — with a refusal vector built from untemplated text the template makes no detectable difference (1.45 vs 1.36); the flip came from the vector's origin |
+| Reachable steps grow faster than quadratic | run 14 — measured along single rays they are quadratic (2.04 to 2.21); the 2.65 and 5.25 came from changing direction between rungs |
 
-Nine retractions, two statements standing, two claims reopened by the October audit. Most
-retractions came from a control a previous writeup had already flagged as missing, which is the
-order that makes a retraction cheap — the flaw was named first and measured later.
+Eleven retractions, three statements standing. Most retractions came from a control a previous
+writeup had already flagged as missing, which is the order that makes a retraction cheap — the
+flaw was named first and measured later. The last two came from an audit of the claims against
+the code itself, which is worth doing on any line of work before it leaves your hands.
 
 ## Limits, throughout
 
