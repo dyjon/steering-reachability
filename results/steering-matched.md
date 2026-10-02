@@ -76,8 +76,9 @@ measuring it over regions where one kind had no donors at all.
 
 **Does not settle.** Why the passage arm reverses at layer 18. Why cross-kind is quieter at
 layer 12 in both arms. And the whole question of what happens below 0.4 norms across kinds,
-which now looks unanswerable by this method rather than merely unanswered: **a cross-kind donor
-at 0.2 norms does not exist to be selected.**
+for *pure* cross-kind donors. **Correction, 1 October:** this originally said the region was
+unanswerable by this method. It is not — the graded blends reach 0.2 norms at 98% coverage on the
+passage arm at layer 12. What is missing below 0.4 is pure other-domain prompts in a 512 pool.
 
 ## Limits
 

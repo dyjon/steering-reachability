@@ -80,52 +80,49 @@ API with the executed file verified by hash against the commit it claims to be.
 | 10 | [format](results/steering-format.md) | Is that difference about the content, or just the chat formatting? | Mostly the formatting — 2.78× against 1.58×. Wrapping *identical* text in a chat turn lifts refusal's subspace energy from 8.8% to 49.9% |
 | 11 | [kind](results/steering-kind.md) | Does it matter what sort of prompt the graft steps toward? | Enormously. The same "domain effect" reads anywhere from **0.73× to 4.87×** depending only on donor kind. **Retracts runs 9 and 10** |
 | 12 | [graded](results/steering-graded.md) | Was run 11 just fitting noise on too little range? | No. And the disturbance **falls as the distance rises**: +16% distance, −38% KL, monotone. Distance is not the variable |
-| 13 | [matched](results/steering-matched.md) | Select donors already sitting at a target distance, rather than building them and hoping | Kind changes the graft **0.51× to 1.27×** at exactly matched distance. And **no cross-kind donor exists below 0.4 norms at all** |
+| 13 | [matched](results/steering-matched.md) | Select donors already sitting at a target distance, rather than building them and hoping | Kind changes the graft by about 2× at exactly matched distance. No *pure* cross-kind donor in a 512 pool sits below 0.4 norms |
 
 ---
 
 ## What stands
 
-**Disturbance is not a function of distance alone.**
-Run 12 shows it in a single ordered column: as the graft's destination moves further away, the
-behavioural change gets *smaller*, monotonically, across five points. That is impossible if
-distance were what mattered. Run 13 then measures the second variable directly, by selecting
-donors that already sit at a chosen distance instead of constructing them, and finds the graft
-changing by 0.51×, 1.27× and 0.58× purely by swapping the *kind* of destination — in the three
-cells where the achieved distances agree to two decimals.
+**Steering stays quadratic out to operating strength.**
+Scaled along its own direction, a steering vector's effect on the next-token distribution grows
+as distance², exponent 1.92 to 2.07, across a sentiment and a refusal vector at layers 6, 12 and
+18, replicated bit-identically. Quadratic behaviour at *small* distance is guaranteed by Taylor
+expansion; the content here is that it holds out to about one activation norm, which is what any
+local, Fisher-metric argument about steering needs.
 
-*Why it matters:* any experiment that fits behavioural change against activation distance alone
-is silently mixing conditions that differ by up to 2× at the same distance. This is the finding
-I would most want someone else to check.
+**Provisional — distance to the reachable set is not enough.**
+Two reachable displacements of the same size can differ by about 2× in behavioural effect,
+depending on which prompt they reach. Run 13 selects donors already sitting at a target distance
+and finds cross/own ratios of 0.51, 1.27 and 0.58 in the three cells where achieved distances
+agree to two decimals.
 
-**No cross-kind destination exists below about 0.4 activation norms.**
-Searching 512 candidates, in either direction, at either depth, nothing of the other prompt sort
-sits within 15% of 0.2 or 0.3 norms of a starting prompt. The two domains are simply that far
-apart in activation space.
+*Why it matters:* even a complete answer to "how close can a prompt get?" would not settle
+whether prompting reproduces steered behaviour, because direction matters as well as distance.
+*Why it is provisional:* runs 12 and 13 report no error bars. The two ~2× effects are very likely
+real; the 1.27 should not be quoted without an interval.
 
-*Why it matters:* it explains two failed runs. Runs 11 and 12 could not get measurement range for
-cross-kind comparisons because there is no range to get — they were fitting a curve over a region
-where the curve does not exist, and no cleverer construction would have helped.
+## Reopened by audit, 1 October
 
-**Chat templating reverses which is louder, at layer 12.**
-In raw passages, a reachable step disturbs behaviour more than refusal does, at ratios of 2.26 to
-3.97. In chat-templated prompts the reverse, in all six cells — two content types by three donor
-kinds — at 0.11 to 0.91.
+Checked against the code rather than the writeups. Each was listed as standing until today.
 
-*One caveat on the evidence:* the six templated figures are independent cells, while the five raw
-ones are a single condition read at five distances. So the templated side is much better
-supported than the raw side. And there is no account of *why* the template does this.
+**The templating flip has a provenance confound.** At layer 12, refusal outweighs a reachable
+step in chat-templated prompts and the reverse holds in raw text. But the refusal vector is
+built from chat-templated prompts in every run that uses it, so on raw text it is a direction
+from one distribution applied to another. A templated-built vector moving templated activations
+more is the expected result, and run 10's rise in alignment from 8.8% to 49.9% is what
+provenance alone would predict. *Control needed:* a refusal vector built from untemplated text.
 
-**Steering stays in the gentle regime; reachable steps leave it.**
-Near any minimum, disturbance should grow as the square of the distance. Steering does — exponent
-1.98, then 2.03 twice more, out past a full activation norm. Reachable steps grow faster, and the
-graft's exponent exceeds refusal's in 11 of 12 conditions, so the gap between them narrows as the
-distance grows.
+**Graft-versus-steering exponents are not like-for-like.** Steering is one direction scaled. The
+graft ladder takes a different donor at every rung, so its exponent mixes magnitude with change
+of direction — and run 13 shows direction alone moves the graft by up to 2×. *Control needed:*
+scale each graft difference along its own ray.
 
-**Measured on raw passages, and true there:** steering is quieter than a random direction drawn
-from where the data actually lives; a reachable step at one position is small, 0.40 norms even
-when three quarters of the context is swapped, against steering's 1.0; and grafting a single
-position reproduces 10–26% of the behavioural change of swapping the whole prompt.
+**"No cross-kind destination below 0.4 norms" is narrower than it reads.** It holds for *pure*
+other-domain prompts in a 512-prompt pool at 15% tolerance. Graded blends of the two do reach
+0.2 norms, so the region is measurable, just not with pure donors.
 
 ## What was retracted
 
@@ -141,9 +138,9 @@ position reproduces 10–26% of the behavioural change of swapping the whole pro
 | Treating disturbance as one-dimensional in distance | run 12 |
 | Two cells whose fitted exponents came out negative | run 12, self-caught |
 
-Nine retractions against four standing claims. Most came from a control that a previous writeup
-had already flagged as missing, which is the order that makes a retraction cheap — the flaw was
-named first and measured later.
+Nine retractions, two statements standing, two claims reopened by the October audit. Most
+retractions came from a control a previous writeup had already flagged as missing, which is the
+order that makes a retraction cheap — the flaw was named first and measured later.
 
 ## Limits, throughout
 
