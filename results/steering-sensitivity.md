@@ -162,7 +162,7 @@ prompt its own random draw instead of averaging 5 global draws.
 - **Sentiment steering has no vulnerability semantics.** The paper uses refusal and persona
   vectors. A refusal vector on the instruct model is the follow-up if the calibration opens
   the gate.
-- **Single position.** Thm 4.3 is about trajectory divergence at i+1; a next-token measurement
+- **Single position.** Thm 4.5 is about trajectory divergence at i+1; a next-token measurement
   does not touch it.
 - One layer, one model, one steering vector. No error bar on the steering column.
 - The energy-split model is crude and additive, fitted against baselines with wide spreads.

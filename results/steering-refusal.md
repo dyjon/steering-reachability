@@ -108,7 +108,7 @@ threshold table be quoted as a statement about refusal.
 
 ## Limits
 
-Carried forward: one model, one position, next-token only, Thm 4.3 untouched, whole-range OLS
+Carried forward: one model, one position, next-token only, Thm 4.5 untouched, whole-range OLS
 slopes averaging across real curvature.
 
 New: the refusal vector rests on 12 matched pairs, which is small for a difference-of-means

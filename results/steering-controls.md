@@ -123,7 +123,7 @@ equation and one plot. Then a second model.
 
 ## Limits
 
-Carried throughout: one model, one position, next-token only, Thm 4.3 untouched, no ablation.
+Carried throughout: one model, one position, next-token only, Thm 4.5 untouched, no ablation.
 New: the ray exponents rest on four points each; the raw-built vector's semantics are uncertain
 as described above; part 1 reports only cells where both kinds were covered, which excludes the
 sub-0.4-norm region by construction.

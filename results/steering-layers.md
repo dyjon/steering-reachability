@@ -96,7 +96,7 @@ this model rather than an accident of one depth.
 - The layer-18 interpolation is bracketed tightly (0.82 and 1.03 norms), so it is the most
   reliable of the three; layer 6 brackets 0.78 and 1.21 and is the loosest.
 - Still one model, one position, still sentiment rather than refusal, still nothing touching
-  Thm 4.3.
+  Thm 4.5.
 
 ## Next
 

@@ -131,7 +131,7 @@ direction of the actual residual is never observed. The graft direction is a pro
 
 Carried forward unchanged from [`steering-graft.md`](steering-graft.md): the position confound
 in the steering vector, sentiment having no vulnerability semantics, one layer, one model, one
-steering vector, one position, and Thm 4.3 untouched.
+steering vector, one position, and Thm 4.5 untouched.
 
 New here:
 

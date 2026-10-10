@@ -156,7 +156,7 @@ the code itself, which is worth doing on any line of work before it leaves your 
 
 ## Limits, throughout
 
-One model. One position. Next-token distribution only, so Thm 4.3, which concerns trajectory
+One model. One position. Next-token distribution only, so Thm 4.5, which concerns trajectory
 divergence at the following position, is untouched. No ablation was ever run: nothing here tests
 that the refusal direction actually *controls* refusal behaviour, so "refusal direction" is a
 claim about how the vector was built, not about what it does. The refusal vector uses 96

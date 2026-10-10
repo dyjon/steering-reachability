@@ -99,7 +99,7 @@ saying explicitly before October rather than being discovered in the meeting.
 
 ## Limits
 
-Carried forward: one model, one position, next-token only, Thm 4.3 untouched, no ablation and
+Carried forward: one model, one position, next-token only, Thm 4.5 untouched, no ablation and
 no test that the refusal direction actually controls refusal behaviour.
 
 New: the instruction ladder spans 0.18 to 0.78 norms while the wikitext ladder spans 0.78 to

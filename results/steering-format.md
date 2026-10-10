@@ -88,7 +88,7 @@ mix cross-domain and own-domain donors that differ by 1.4× to 2.3× at identica
 
 ## Limits
 
-Carried forward: one model, one position, next-token only, Thm 4.3 untouched, no ablation and no
+Carried forward: one model, one position, next-token only, Thm 4.5 untouched, no ablation and no
 test that the refusal direction controls refusal behaviour.
 
 New: `self` variants use different prefixes in the two templated arms — instruction openers

@@ -108,7 +108,7 @@ sound, and it took a two-way design to see that.
 
 ## Limits
 
-Carried forward: one model, one position, next-token only, Thm 4.3 untouched, no ablation and no
+Carried forward: one model, one position, next-token only, Thm 4.5 untouched, no ablation and no
 test that the refusal direction controls refusal behaviour.
 
 New: the `xdom` ladders have too little dynamic range to fit an exponent, by construction rather

@@ -109,7 +109,7 @@ and that is the run that settles it.
 
 ## Limits
 
-Carried forward: one model, one position, next-token only, Thm 4.3 untouched, no ablation and
+Carried forward: one model, one position, next-token only, Thm 4.5 untouched, no ablation and
 no test that the refusal direction controls refusal behaviour.
 
 New: the sentiment column is chat-templated and comparable to runs 7 and 8 only, not to run 6.

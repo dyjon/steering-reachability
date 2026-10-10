@@ -88,7 +88,7 @@ target distances from a large mixed pool, rather than constructing them.
 
 ## Limits
 
-Carried forward: one model, one position, next-token only, Thm 4.3 untouched, no ablation and no
+Carried forward: one model, one position, next-token only, Thm 4.5 untouched, no ablation and no
 test that the refusal direction controls refusal behaviour.
 
 New: three of four graded cells span under 2×, so only the layer-12 wikitext graded fit is

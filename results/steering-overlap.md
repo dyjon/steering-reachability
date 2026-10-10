@@ -97,7 +97,7 @@ displacement *kind* as a second variable.
 
 ## Limits
 
-Carried forward: one model, one position, next-token only, Thm 4.3 untouched, no ablation and no
+Carried forward: one model, one position, next-token only, Thm 4.5 untouched, no ablation and no
 test that the refusal direction controls refusal behaviour.
 
 New: the two arms use different donor constructions by design, so a residual construction effect

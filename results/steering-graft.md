@@ -160,7 +160,7 @@ sub-quadratic, consistent with saturation, and close enough to trust both runs.
 - One layer, one model, one steering vector, no error bar on steering's *direction* (only on
   its per-prompt KL).
 - The variant family is narrow by construction, which caps ‖d‖ at 0.4 activation norms.
-- Single position. Thm 4.3 is about trajectory divergence at i+1 and is untouched.
+- Single position. Thm 4.5 is about trajectory divergence at i+1 and is untouched.
 - Extrapolating graft's p = 2.65 out to ‖d‖ = 15.3 gives 2.61 nats against steering's measured
   0.4337, a 6× gap. That is extrapolation well beyond the data, and prompts may not be able to
   displace one position that far at all. Do not quote it.

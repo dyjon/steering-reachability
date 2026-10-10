@@ -82,7 +82,7 @@ passage arm at layer 12. What is missing below 0.4 is pure other-domain prompts 
 
 ## Limits
 
-Carried throughout: one model, one position, next-token only, Thm 4.3 untouched, no ablation and
+Carried throughout: one model, one position, next-token only, Thm 4.5 untouched, no ablation and
 no test that the refusal direction controls refusal behaviour.
 
 New: the 15% tolerance is a judgement call, and a looser one would report coverage where the
